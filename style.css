@@ -546,6 +546,7 @@ body {
     position: relative;
 }
 
+/* Fix for duplicate text in hero title */
 .title-line.highlight::before {
     content: attr(data-text);
     position: absolute;
@@ -554,6 +555,38 @@ body {
     color: transparent;
     -webkit-text-stroke: 2px rgba(255, 215, 0, 0.3);
     z-index: -1;
+    /* FIX: Reduce opacity and blur to prevent duplication effect */
+    opacity: 0.3;
+    filter: blur(1px);
+}
+
+/* Alternative simpler fix - remove the before element entirely for mobile */
+@media (max-width: 768px) {
+    .title-line.highlight::before {
+        display: none; /* Remove the stroke effect on mobile */
+    }
+    
+    /* Or keep it but make it very subtle */
+    .title-line.highlight {
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+}
+
+/* Even better fix - simplify the highlight effect */
+.title-line.highlight {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: highlightPulse 3s ease-in-out infinite;
+    position: relative;
+    /* Add glow effect instead of duplicate text */
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+}
+
+/* Remove the problematic before element entirely for a cleaner solution */
+.title-line.highlight::before {
+    content: none; /* Remove the duplicate text effect */
 }
 
 .hero-description {
@@ -2284,6 +2317,4 @@ img {
     transition: var(--transition-normal);
 }
 
-.title-line.highlight::before {
-    content: none;
-}
+
