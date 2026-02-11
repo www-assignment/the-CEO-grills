@@ -2283,3 +2283,7 @@ img {
     object-fit: cover;
     transition: var(--transition-normal);
 }
+
+.title-line.highlight::before {
+    content: none;
+}
