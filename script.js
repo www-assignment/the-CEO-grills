@@ -1041,3 +1041,71 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Add this to your existing script.js in the DOMContentLoaded function
+
+// Enhanced Mobile Menu with Overlay
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const navMenu = document.querySelector('.nav-menu');
+const navOverlay = document.createElement('div');
+navOverlay.className = 'nav-overlay';
+document.body.appendChild(navOverlay);
+
+// Close mobile menu when clicking overlay
+navOverlay.addEventListener('click', () => {
+    navMenu.classList.remove('active');
+    navOverlay.classList.remove('active');
+});
+
+// Enhanced mobile menu toggle
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        navOverlay.classList.toggle('active');
+        
+        // Prevent body scroll when menu is open
+        if (navMenu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    });
+}
+
+// Close mobile menu when clicking a link
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        navOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+});
+
+// Handle window resize
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        navMenu.classList.remove('active');
+        navOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+});
+
+// Optimize scroll performance by throttling
+let scrollTimeout;
+window.addEventListener('scroll', () => {
+    // Clear the timeout if it's already set
+    clearTimeout(scrollTimeout);
+    
+    // Set a timeout to run the scroll functions
+    scrollTimeout = setTimeout(() => {
+        // Your existing scroll logic here
+        const scrolled = window.pageYOffset;
+        const background = document.querySelector('.background-container');
+        
+        // Throttle the background movement
+        if (background) {
+            const yOffset = scrolled * 0.3;
+            background.style.transform = `translateY(${yOffset}px)`;
+        }
+    }, 16); // ~60fps
+});
